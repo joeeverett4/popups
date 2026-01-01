@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Koot - Special Offer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f0f0f0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        /* Demo Button */
+        .demo-btn {
+            padding: 16px 40px;
+            font-size: 16px;
+            font-weight: 600;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(30, 60, 114, 0.3);
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .demo-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(30, 60, 114, 0.4);
+        }
+
+        /* Popup Overlay */
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .popup-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Popup Container */
+        .popup-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            background-image: url('koot_house_background_1767172070849.png');
+            background-size: cover;
+            background-position: center;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+
+        .popup-overlay.active .popup-container {
+            transform: scale(1);
+        }
+
+        /* Dark Overlay on Background */
+        .popup-content-wrapper {
+            position: relative;
+            background: rgba(0, 0, 0, 0.65);
+            padding: 80px 60px;
+            min-height: 500px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Close Button */
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: none;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 32px;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .close-btn:hover {
+            color: #fff;
+            transform: rotate(90deg);
+        }
+
+        /* Logo */
+        .koot-logo {
+            background: white;
+            padding: 10px 30px;
+            border-radius: 4px;
+            margin-bottom: 40px;
+            display: inline-block;
+        }
+
+        .koot-logo span {
+            font-size: 32px;
+            font-weight: 700;
+            color: #1a3d5c;
+        }
+
+        /* Step Container */
+        .step {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .step.active {
+            opacity: 1;
+            visibility: visible;
+            animation: slideDown 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .step.exit {
+            animation: slideUp 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -60%);
+            }
+
+            to {
+                opacity: 1;
+                transform: translate(-50%, -50%);
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 1;
+                transform: translate(-50%, -50%);
+            }
+
+            to {
+                opacity: 0;
+                transform: translate(-50%, -40%);
+            }
+        }
+
+        /* Heading */
+        .step h1 {
+            color: white;
+            font-size: 48px;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 20px;
+            letter-spacing: -1px;
+        }
+
+        .step h2 {
+            color: white;
+            font-size: 42px;
+            font-weight: 600;
+            line-height: 1.2;
+            margin-bottom: 16px;
+            letter-spacing: -0.5px;
+        }
+
+        /* Subtext */
+        .step p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 16px;
+            margin-bottom: 32px;
+            font-weight: 400;
+        }
+
+        /* Buttons */
+        .btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 16px 32px;
+            font-size: 15px;
+            font-weight: 500;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .btn-white {
+            background: white;
+            color: #1a3d5c;
+        }
+
+        .btn-white:hover {
+            background: #f0f0f0;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-dark {
+            background: #1a3d5c;
+            color: white;
+        }
+
+        .btn-dark:hover {
+            background: #2a5298;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(26, 61, 92, 0.5);
+        }
+
+        /* Text Link */
+        .text-link {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 14px;
+            text-decoration: underline;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .text-link:hover {
+            color: white;
+        }
+
+        /* Input Field */
+        .input-field {
+            width: 100%;
+            padding: 16px 20px;
+            font-size: 15px;
+            border: none;
+            border-radius: 6px;
+            margin-bottom: 12px;
+            font-family: 'Inter', sans-serif;
+            background: white;
+            color: #333;
+        }
+
+        .input-field::placeholder {
+            color: #999;
+        }
+
+        .input-field:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
+        }
+
+        /* Code Box */
+        .code-box {
+            border: 2px dashed rgba(255, 255, 255, 0.8);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .code-text {
+            color: white;
+            font-size: 24px;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .copy-icon {
+            cursor: pointer;
+            color: white;
+            font-size: 20px;
+            transition: transform 0.2s ease;
+        }
+
+        .copy-icon:hover {
+            transform: scale(1.2);
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            .popup-content-wrapper {
+                padding: 60px 30px;
+            }
+
+            .step h1 {
+                font-size: 36px;
+            }
+
+            .step h2 {
+                font-size: 32px;
+            }
+
+            .koot-logo span {
+                font-size: 28px;
+            }
+
+            .code-text {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Demo Button -->
+    <button class="demo-btn" id="showPopup">Show Popup</button>
+
+    <!-- Popup Overlay -->
+    <div class="popup-overlay" id="popupOverlay">
+        <div class="popup-container">
+            <div class="popup-content-wrapper">
+                <!-- Close Button -->
+                <button class="close-btn" id="closePopup">&times;</button>
+
+                <!-- Logo (Fixed Position) -->
+                <div class="koot-logo">
+                    <span>koot.</span>
+                </div>
+
+                <!-- Step 1: Shopping Selection -->
+                <div class="step active" id="step1">
+                    <h1>YOU'VE GOT<br>L893LIIVUD</h1>
+                    <p>Who are you shopping for today?</p>
+                    <div class="btn-group">
+                        <button class="btn btn-white" data-next="step2">Myself</button>
+                        <button class="btn btn-white" data-next="step2">Someone else</button>
+                    </div>
+                    <a class="text-link" id="noThanks">No thanks</a>
+                </div>
+
+                <!-- Step 2: Email Capture -->
+                <div class="step" id="step2">
+                    <h1>YOU'VE GOT<br>L893LIIVUD</h1>
+                    <input type="email" class="input-field" placeholder="Your email address" id="emailInput">
+                    <button class="btn btn-white" id="claimBtn">Claim L893LIIVUD</button>
+                </div>
+
+                <!-- Step 3: Code Display -->
+                <div class="step" id="step3">
+                    <h2>FOR L893LIIVUD</h2>
+                    <p>Use this code at checkout:</p>
+                    <div class="code-box">
+                        <span class="code-text">L893LIIVUD</span>
+                        <span class="copy-icon" id="copyIcon">📋</span>
+                    </div>
+                    <button class="btn btn-white" id="shopNow">Shop now</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Get elements
+        const popupOverlay = document.getElementById('popupOverlay');
+        const showPopupBtn = document.getElementById('showPopup');
+        const closePopupBtn = document.getElementById('closePopup');
+        const noThanksLink = document.getElementById('noThanks');
+        const claimBtn = document.getElementById('claimBtn');
+        const copyIcon = document.getElementById('copyIcon');
+        const shopNowBtn = document.getElementById('shopNow');
+        const emailInput = document.getElementById('emailInput');
+
+        let currentStep = 1;
+
+        // Show popup
+        function showPopup() {
+            popupOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Hide popup
+        function hidePopup() {
+            popupOverlay.classList.remove('active');
+            document.body.style.overflow = '';
+            // Reset to step 1 after closing
+            setTimeout(() => {
+                goToStep(1, false);
+            }, 300);
+        }
+
+        // Navigate to step
+        function goToStep(stepNumber, animate = true) {
+            const currentStepEl = document.getElementById(`step${currentStep}`);
+            const nextStepEl = document.getElementById(`step${stepNumber}`);
+
+            if (animate) {
+                // Add exit animation
+                currentStepEl.classList.add('exit');
+
+                setTimeout(() => {
+                    currentStepEl.classList.remove('active', 'exit');
+                    nextStepEl.classList.add('active');
+                    currentStep = stepNumber;
+                }, 500);
+            } else {
+                // Instant switch (for reset)
+                document.querySelectorAll('.step').forEach(step => {
+                    step.classList.remove('active', 'exit');
+                });
+                nextStepEl.classList.add('active');
+                currentStep = stepNumber;
+            }
+        }
+
+        // Event listeners for step 1 buttons
+        document.querySelectorAll('[data-next]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const nextStep = parseInt(btn.getAttribute('data-next').replace('step', ''));
+                goToStep(nextStep);
+            });
+        });
+
+        // Claim button
+        claimBtn.addEventListener('click', () => {
+            const email = emailInput.value.trim();
+            if (email && email.includes('@')) {
+                console.log('Email captured:', email);
+                goToStep(3);
+            } else {
+                alert('Please enter a valid email address');
+            }
+        });
+
+        // Copy code
+        copyIcon.addEventListener('click', () => {
+            const code = 'L893LIIVUD';
+            navigator.clipboard.writeText(code).then(() => {
+                copyIcon.textContent = '✓';
+                setTimeout(() => {
+                    copyIcon.textContent = '📋';
+                }, 2000);
+            });
+        });
+
+        // Shop now
+        shopNowBtn.addEventListener('click', () => {
+            console.log('Redirecting to shop...');
+            alert('Redirecting to shop...');
+            hidePopup();
+        });
+
+        // Show popup button
+        showPopupBtn.addEventListener('click', showPopup);
+
+        // Close popup
+        closePopupBtn.addEventListener('click', hidePopup);
+        noThanksLink.addEventListener('click', hidePopup);
+
+        // Close on overlay click
+        popupOverlay.addEventListener('click', (e) => {
+            if (e.target === popupOverlay) {
+                hidePopup();
+            }
+        });
+
+        // Close on ESC
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && popupOverlay.classList.contains('active')) {
+                hidePopup();
+            }
+        });
+
+        // Auto-show popup after 1 second (for demo)
+        setTimeout(() => {
+            showPopup();
+        }, 1000);
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skull Bliss - Exclusive Offer</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Montserrat:wght@400;500;600&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <!-- Demo button to show popup -->
+    <button id="show-popup-btn" class="demo-btn">Show Popup</button>
+
+    <!-- Modal Overlay -->
+    <div id="popup-overlay" class="popup-overlay">
+        <div class="popup-modal">
+            <!-- Close button -->
+            <button class="close-btn" id="close-popup">&times;</button>
+
+            <!-- Left side - Image -->
+            <div class="popup-left">
+                <img src="skull_bliss_interior_1767169110609.png" alt="Rustic southwestern interior with skull decor"
+                    class="popup-image">
+            </div>
+
+            <!-- Right side - Content -->
+            <div class="popup-right">
+                <div class="popup-content">
+                    <h3 class="brand-name">SKULL BLISS</h3>
+                    <h1 class="main-heading">YOU'VE GOT<br>UP TO 40% OFF</h1>
+                    <p class="subtext">Tell us what you are looking for,<br>We'll tailor your picks:</p>
+
+                    <div class="button-group">
+                        <button class="category-btn" data-category="wall-decor">WALL DECOR</button>
+                        <button class="category-btn" data-category="table-display">TABLE DISPLAY</button>
+                        <button class="category-btn" data-category="symbolic-pieces">SYMBOLIC PIECES</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="theme.js"></script>
+</body>
+
+</html>
